@@ -5,22 +5,17 @@ import Editable from "react-editable-title";
 interface BoardSettings {
   id: number;
   name: string;
-  list: Array<string>;
+  key: number;
+  list: Array<any>;
 }
 
 export default function Board(props: BoardSettings) {
-  const [boardTitle, setBoardTitle] = React.useState("New Board");
+  const [boardTitle, setBoardTitle] = React.useState(props.name);
   //Checks if board is in focus for the handleName functions
   const [focused, setFocused] = React.useState(false);
 
   //List that will be stored in localstorage
-  const [list, setList] = React.useState([
-    {
-      title: "Test1",
-      description: "Test description",
-      tags: "urgent",
-    },
-  ]);
+  const [list, setList] = React.useState(props.list);
 
   const listItemsContent = list.map((data) => {
     return (

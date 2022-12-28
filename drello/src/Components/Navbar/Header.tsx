@@ -2,10 +2,17 @@ import React from "react";
 import { Navbar, Button } from "flowbite-react";
 import Contact from "./Contact";
 import About from "./About";
+import CreateBoardModal from "../Dashboard/CreateBoardModal";
+import { nanoid } from "nanoid";
 
-export default function Header() {
+interface boardHandle {
+  createBoard: any;
+}
+
+export default function Header(props: boardHandle) {
   const [showContactModal, setShowContactModal] = React.useState(false);
   const [showAboutModal, setShowAboutModal] = React.useState(false);
+  const [showCreateBoardModal, setShowCreateBoardModal] = React.useState(false);
 
   function toggleContactModal() {
     setShowContactModal((prevModalState) => !prevModalState);
@@ -15,9 +22,17 @@ export default function Header() {
     setShowAboutModal((prevModalState) => !prevModalState);
   }
 
-  React.useEffect(() => {
-    console.log(showContactModal);
-  }, [showContactModal]);
+  function toggleCreateBoardModal() {
+    setShowCreateBoardModal((prevModalState) => !prevModalState);
+  }
+
+  function createNewBoard(title: string) {
+    const newBoard = {
+      id: nanoid(),
+      title: title,
+    };
+    return props.createBoard(newBoard);
+  }
 
   return (
     <Navbar fluid={true} rounded={true}>
@@ -32,7 +47,11 @@ export default function Header() {
         </span>
       </Navbar.Brand>
       <div className="flex md:order-2">
-        <Button>Create Board</Button>
+        {/* <Button onClick={() => createNewBoard("test")}>Create Board</Button> */}
+        <Button onClick={() => setShowCreateBoardModal(true)}>
+          Create Board
+        </Button>
+
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse>
@@ -61,6 +80,14 @@ export default function Header() {
 
         {showAboutModal && (
           <About modalVisable={showAboutModal} toggleModal={toggleAboutModal} />
+        )}
+
+        {showCreateBoardModal && (
+          <CreateBoardModal
+            modalVisable={showCreateBoardModal}
+            toggleModal={toggleCreateBoardModal}
+            createNewBoard={createNewBoard}
+          />
         )}
       </Navbar.Collapse>
     </Navbar>
