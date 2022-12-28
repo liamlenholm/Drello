@@ -1,17 +1,23 @@
 import React from "react";
 import { Navbar, Button } from "flowbite-react";
 import Contact from "./Contact";
+import About from "./About";
 
 export default function Header() {
-  const [showModal, setShowModal] = React.useState(false);
+  const [showContactModal, setShowContactModal] = React.useState(false);
+  const [showAboutModal, setShowAboutModal] = React.useState(false);
 
-  function toggleModal() {
-    setShowModal((prevModal) => !prevModal);
+  function toggleContactModal() {
+    setShowContactModal((prevModalState) => !prevModalState);
+  }
+
+  function toggleAboutModal() {
+    setShowAboutModal((prevModalState) => !prevModalState);
   }
 
   React.useEffect(() => {
-    console.log(showModal);
-  }, [showModal]);
+    console.log(showContactModal);
+  }, [showContactModal]);
 
   return (
     <Navbar fluid={true} rounded={true}>
@@ -33,10 +39,28 @@ export default function Header() {
         <Navbar.Link href="#" active={true}>
           Home
         </Navbar.Link>
-        <Navbar.Link href="#">About</Navbar.Link>
-        <Navbar.Link onClick={() => setShowModal(true)}>Contact</Navbar.Link>
-        {showModal && (
-          <Contact modalVisable={showModal} toggleModal={toggleModal} />
+        <Navbar.Link
+          style={{ cursor: "pointer" }}
+          onClick={() => setShowAboutModal(true)}
+        >
+          About
+        </Navbar.Link>
+
+        <Navbar.Link
+          style={{ cursor: "pointer" }}
+          onClick={() => setShowContactModal(true)}
+        >
+          Contact
+        </Navbar.Link>
+        {showContactModal && (
+          <Contact
+            modalVisable={showContactModal}
+            toggleModal={toggleContactModal}
+          />
+        )}
+
+        {showAboutModal && (
+          <About modalVisable={showAboutModal} toggleModal={toggleAboutModal} />
         )}
       </Navbar.Collapse>
     </Navbar>
