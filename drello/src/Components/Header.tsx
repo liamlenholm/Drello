@@ -1,7 +1,18 @@
 import React from "react";
 import { Navbar, Button } from "flowbite-react";
+import Contact from "./Contact";
 
 export default function Header() {
+  const [showModal, setShowModal] = React.useState(false);
+
+  function toggleModal() {
+    setShowModal((prevModal) => !prevModal);
+  }
+
+  React.useEffect(() => {
+    console.log(showModal);
+  }, [showModal]);
+
   return (
     <Navbar fluid={true} rounded={true}>
       <Navbar.Brand href="https://github.com/liamlenholm/Drello">
@@ -19,11 +30,14 @@ export default function Header() {
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse>
-        <Navbar.Link href="/navbars" active={true}>
+        <Navbar.Link href="#" active={true}>
           Home
         </Navbar.Link>
-        <Navbar.Link href="/navbars">About</Navbar.Link>
-        <Navbar.Link href="/navbars">Contact</Navbar.Link>
+        <Navbar.Link href="#">About</Navbar.Link>
+        <Navbar.Link onClick={() => setShowModal(true)}>Contact</Navbar.Link>
+        {showModal && (
+          <Contact modalVisable={showModal} toggleModal={toggleModal} />
+        )}
       </Navbar.Collapse>
     </Navbar>
   );
