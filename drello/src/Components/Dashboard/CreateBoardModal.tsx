@@ -24,7 +24,13 @@ export default function CreateBoardModal(props: ModalVisable) {
   //Close the Modal and run the function createNewBoard which was sent via Header
   function createBoard() {
     props.toggleModal();
-    return props.createNewBoard(formData.boardName);
+
+    //If you create a board without a name the name will be set to Default
+    if (formData.boardName) {
+      return props.createNewBoard(formData.boardName);
+    } else {
+      return props.createNewBoard("Default");
+    }
   }
 
   return (
