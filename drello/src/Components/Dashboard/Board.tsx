@@ -1,6 +1,8 @@
 import React from "react";
 import { Card, Dropdown } from "flowbite-react";
 import Editable from "react-editable-title";
+import { nanoid } from "nanoid";
+import CreateListItemModal from "./CreateListItemModal";
 
 interface BoardSettings {
   id: string;
@@ -9,6 +11,7 @@ interface BoardSettings {
   deleteBoard: any;
   updateLS: any;
   updateBoardTitle: any;
+  addListItems: any;
 }
 
 export default function Board(props: BoardSettings) {
@@ -17,12 +20,28 @@ export default function Board(props: BoardSettings) {
   const [focused, setFocused] = React.useState(false);
 
   //List that will be stored in localstorage
-  const [list, setList] = React.useState(props.list);
+  const [list, setList] = React.useState([
+    {
+      title: "",
+      description: "",
+      tags: "",
+      id: nanoid(),
+    },
+  ]);
+
+  const [showCreateListItemModal, setShowCreateListItemModal] =
+    React.useState(false);
+
+  function toggleCreateBoardModal() {
+    setShowCreateListItemModal((prevModalState) => !prevModalState);
+  }
 
   React.useEffect(() => {
     console.log("Board 23 ran");
     return () => props.updateLS;
   }, [boardTitle]);
+
+  console.log(list, "list in board.tsx");
 
   const listItemsContent = list.map((data) => {
     return (
@@ -75,11 +94,17 @@ export default function Board(props: BoardSettings) {
           </h5>
           <div className="items-end">
             <a
-              href="#"
+              onClick={() => setShowCreateListItemModal(true)}
               className="mx-1 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
             >
               Add Task
             </a>
+            {showCreateListItemModal && (
+              <CreateListItemModal
+                modalVisable={showCreateListItemModal}
+                toggleModal={toggleCreateBoardModal}
+              />
+            )}
             <div className="inline-flex mx-1">
               <Dropdown label="Edit" dismissOnClick={false} size="xs">
                 <Dropdown.Item>Color</Dropdown.Item>

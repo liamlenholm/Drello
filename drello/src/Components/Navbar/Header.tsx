@@ -47,7 +47,6 @@ export default function Header(props: boardHandle) {
         </span>
       </Navbar.Brand>
       <div className="flex md:order-2">
-        {/* <Button onClick={() => createNewBoard("test")}>Create Board</Button> */}
         <Button onClick={() => setShowCreateBoardModal(true)}>
           Create Board
         </Button>

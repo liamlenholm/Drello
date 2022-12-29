@@ -38,6 +38,10 @@ function App() {
     );
   }
 
+  function addListItems() {
+    console.log("test");
+  }
+
   function updateBoardName() {}
 
   return (
@@ -48,6 +52,7 @@ function App() {
         deleteBoard={deleteBoard}
         updateLS={updateLS}
         updateBoardTitle={updateBoardTitle}
+        addListItems={addListItems}
       />
     </div>
   );

@@ -7,23 +7,10 @@ interface boardHandle {
   deleteBoard: any;
   updateLS: any;
   updateBoardTitle: any;
+  addListItems: any;
 }
 
 export default function Dashboard(props: boardHandle) {
-  const allBoards = props.boardItems.map((board: any) => {
-    return (
-      <Board
-        name={board.title}
-        list={["test"]}
-        key={board.id}
-        id={board.id}
-        deleteBoard={props.deleteBoard}
-        updateLS={props.updateLS}
-        updateBoardTitle={props.updateBoardTitle}
-      />
-    );
-  });
-
   const listItems = [
     {
       title: "Task 1",
@@ -36,6 +23,23 @@ export default function Dashboard(props: boardHandle) {
       tags: "URGENT",
     },
   ];
+
+  const [itemsBoard, setItemsBoard] = React.useState();
+
+  const allBoards = props.boardItems.map((board: any) => {
+    return (
+      <Board
+        name={board.title}
+        list={listItems}
+        key={board.id}
+        id={board.id}
+        deleteBoard={props.deleteBoard}
+        updateLS={props.updateLS}
+        updateBoardTitle={props.updateBoardTitle}
+        addListItems={props.addListItems}
+      />
+    );
+  });
 
   return <div>{allBoards}</div>;
 }
