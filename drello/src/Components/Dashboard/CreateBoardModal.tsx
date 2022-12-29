@@ -21,6 +21,7 @@ export default function CreateBoardModal(props: ModalVisable) {
     });
   }
 
+  //Close the Modal and run the function createNewBoard which was sent via Header
   function createBoard() {
     props.toggleModal();
     return props.createNewBoard(formData.boardName);

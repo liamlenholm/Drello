@@ -86,6 +86,7 @@ export default function Header(props: boardHandle) {
           <CreateBoardModal
             modalVisable={showCreateBoardModal}
             toggleModal={toggleCreateBoardModal}
+            //Sending the function as a prop
             createNewBoard={createNewBoard}
           />
         )}

@@ -18,12 +18,19 @@ function App() {
     console.log(boardItems);
   }
 
+  function deleteBoard(boardId: string) {
+    console.log("Deleted board", boardId);
+    setBoardItems((oldBoardItems: any) =>
+      oldBoardItems.filter((board: any) => board.id !== boardId)
+    );
+  }
+
   function updateBoardName() {}
 
   return (
     <div>
       <Header createBoard={createNewBoard} />
-      <Dashboard boardItems={boardItems} />
+      <Dashboard boardItems={boardItems} deleteBoard={deleteBoard} />
     </div>
   );
 }

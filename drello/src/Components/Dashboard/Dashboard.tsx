@@ -4,12 +4,19 @@ import Board from "./Board";
 
 interface boardHandle {
   boardItems: any;
+  deleteBoard: any;
 }
 
 export default function Dashboard(props: boardHandle) {
   const allBoards = props.boardItems.map((board: any) => {
     return (
-      <Board name={board.title} list={["test"]} key={board.id} id={board.id} />
+      <Board
+        name={board.title}
+        list={["test"]}
+        key={board.id}
+        id={board.id}
+        deleteBoard={props.deleteBoard}
+      />
     );
   });
 

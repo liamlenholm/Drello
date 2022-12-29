@@ -1,16 +1,16 @@
 import React from "react";
-import { Card } from "flowbite-react";
+import { Card, Dropdown } from "flowbite-react";
 import Editable from "react-editable-title";
 
 interface BoardSettings {
-  id: number;
+  id: string;
   name: string;
-  key: number;
   list: Array<any>;
+  deleteBoard: any;
 }
 
 export default function Board(props: BoardSettings) {
-  const [boardTitle, setBoardTitle] = React.useState(props.name);
+  const [boardTitle, setBoardTitle] = React.useState(props);
   //Checks if board is in focus for the handleName functions
   const [focused, setFocused] = React.useState(false);
 
@@ -39,7 +39,7 @@ export default function Board(props: BoardSettings) {
   });
 
   const handleNameUpdate = (current: string) => {
-    setBoardTitle(current);
+    // setBoardTitle(current);
   };
   const handleEditCancel = () => {
     console.log("Edit has been canceled");
@@ -50,12 +50,12 @@ export default function Board(props: BoardSettings) {
   };
 
   return (
-    <div className="max-w-fit inline-grid mx-3 mt-2">
+    <div className="max-w-fit inline-grid mx-3 mt-2" key={boardTitle.id}>
       <Card>
         <div className="mb-4 flex items-center justify-between">
           <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">
             <Editable
-              text={boardTitle}
+              text={boardTitle.name}
               seamlessInput
               placeholder="Board Name"
               cb={handleNameUpdate}
@@ -69,12 +69,14 @@ export default function Board(props: BoardSettings) {
             >
               Add Task
             </a>
-            <a
-              href="#"
-              className="mx-1 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
-            >
-              Edit
-            </a>
+            <div className="inline-flex mx-1">
+              <Dropdown label="Edit" dismissOnClick={false} size="xs">
+                <Dropdown.Item>Color</Dropdown.Item>
+                <Dropdown.Item onClick={() => props.deleteBoard(boardTitle.id)}>
+                  Delete
+                </Dropdown.Item>
+              </Dropdown>
+            </div>
           </div>
         </div>
         <div className="flow-root">
