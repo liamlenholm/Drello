@@ -7,6 +7,8 @@ interface BoardSettings {
   name: string;
   list: Array<any>;
   deleteBoard: any;
+  updateLS: any;
+  updateBoardTitle: any;
 }
 
 export default function Board(props: BoardSettings) {
@@ -16,6 +18,11 @@ export default function Board(props: BoardSettings) {
 
   //List that will be stored in localstorage
   const [list, setList] = React.useState(props.list);
+
+  React.useEffect(() => {
+    console.log("Board 23 ran");
+    return () => props.updateLS;
+  }, [boardTitle]);
 
   const listItemsContent = list.map((data) => {
     return (
@@ -39,7 +46,11 @@ export default function Board(props: BoardSettings) {
   });
 
   const handleNameUpdate = (current: string) => {
-    // setBoardTitle(current);
+    setBoardTitle({
+      ...boardTitle,
+      name: current,
+    });
+    props.updateBoardTitle(boardTitle.id, current);
   };
   const handleEditCancel = () => {
     console.log("Edit has been canceled");

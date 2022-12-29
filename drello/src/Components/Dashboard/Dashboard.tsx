@@ -5,6 +5,8 @@ import Board from "./Board";
 interface boardHandle {
   boardItems: any;
   deleteBoard: any;
+  updateLS: any;
+  updateBoardTitle: any;
 }
 
 export default function Dashboard(props: boardHandle) {
@@ -16,6 +18,8 @@ export default function Dashboard(props: boardHandle) {
         key={board.id}
         id={board.id}
         deleteBoard={props.deleteBoard}
+        updateLS={props.updateLS}
+        updateBoardTitle={props.updateBoardTitle}
       />
     );
   });
