@@ -17,11 +17,6 @@ export default function Dashboard(props: boardHandle) {
       description: "Description",
       tags: "URGENT",
     },
-    {
-      title: "Task 2",
-      description: "Description2",
-      tags: "URGENT",
-    },
   ];
 
   const [itemsBoard, setItemsBoard] = React.useState();
