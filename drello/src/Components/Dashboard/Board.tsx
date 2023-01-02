@@ -1,9 +1,11 @@
 import React from "react";
-import { Card, Dropdown } from "flowbite-react";
+import { Card, Dropdown, Button } from "flowbite-react";
 import Editable from "react-editable-title";
 import CreateListItemModal from "./CreateListItemModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { DragDropContext } from "react-beautiful-dnd";
+import { nanoid } from "nanoid";
 
 interface BoardSettings {
   id: string;
@@ -13,6 +15,7 @@ interface BoardSettings {
   updateLS: any;
   updateBoardTitle: any;
   addListItems: any;
+  deleteTask: any;
 }
 
 export default function Board(props: BoardSettings) {
@@ -46,14 +49,20 @@ export default function Board(props: BoardSettings) {
           taskTags: "none",
           id: boardTitle.id,
           key: boardTitle.id,
+          //ID2 is for the deleteTask func
+          id2: nanoid(),
         };
       })
     );
   }
 
+  function deleteTask(taskId: string) {
+    props.deleteTask(taskId);
+  }
+
   React.useEffect(() => {
     //Stops it from saving an empty task every site refresh
-    if (list[0]["id"] !== "") {
+    if (list[0]["taskName"] !== "") {
       props.addListItems(list);
     }
   }, [list]);
@@ -67,23 +76,34 @@ export default function Board(props: BoardSettings) {
     if (data.taskName.length > 0) {
       if (boardTitle.id == data.id) {
         return (
-          <li className="py-3 sm:py-4">
-            <div className="flex items-center space-x-4">
-              <div className="shrink-0"></div>
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
-                  {data.taskName}
-                </p>
-                <p className="text-ellipsis truncate text-sm max-w-xs text-gray-500 dark:text-gray-400">
-                  {data.taskDescription}
-                </p>
+          <div>
+            <li className="py-3 sm:py-4">
+              <div className="flex items-center space-x-4">
+                <div className="shrink-0"></div>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
+                    {data.taskName}
+                  </p>
+                  <p className="text-ellipsis truncate text-sm max-w-xs text-gray-500 dark:text-gray-400">
+                    {data.taskDescription}
+                  </p>
+                </div>
+                <div className="inline-flex items-center text-base text-gray-900 dark:text-white">
+                  <Button size="xs" className="mr-1">
+                    <FontAwesomeIcon icon={faPen} />
+                  </Button>
+                  <Button
+                    size="xs"
+                    className="mr-1"
+                    color="failure"
+                    onClick={() => deleteTask(data.id2)}
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </Button>
+                </div>
               </div>
-              <div className="inline-flex items-center text-base text-gray-900 dark:text-white">
-                <FontAwesomeIcon icon={faPen} size="xs" pull="left" />
-                <FontAwesomeIcon icon={faTrash} size="xs" pull="right" />
-              </div>
-            </div>
-          </li>
+            </li>
+          </div>
         );
       }
     }

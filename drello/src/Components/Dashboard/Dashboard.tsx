@@ -23,6 +23,12 @@ export default function Dashboard(props: boardHandle) {
     setItemsBoard(itemsBoard.concat(list));
   }
 
+  function deleteTask(TaskID: string) {
+    setItemsBoard((oldItemsBoard: any) =>
+      oldItemsBoard.filter((items: any) => items.id2 !== TaskID)
+    );
+  }
+
   const allBoards = props.boardItems.map((board: any) => {
     return (
       <Board
@@ -34,6 +40,7 @@ export default function Dashboard(props: boardHandle) {
         updateLS={props.updateLS}
         updateBoardTitle={props.updateBoardTitle}
         addListItems={addListItems}
+        deleteTask={deleteTask}
       />
     );
   });
