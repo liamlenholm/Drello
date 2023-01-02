@@ -2,7 +2,7 @@ import React from "react";
 import { Navbar, Button } from "flowbite-react";
 import Contact from "./Contact";
 import About from "./About";
-import CreateBoardModal from "../Dashboard/CreateBoardModal";
+import CreateBoardModal from "../Dashboard/Modals/CreateBoardModal";
 import { nanoid } from "nanoid";
 
 interface boardHandle {

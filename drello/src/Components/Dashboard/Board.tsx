@@ -1,11 +1,12 @@
 import React from "react";
 import { Card, Dropdown, Button } from "flowbite-react";
 import Editable from "react-editable-title";
-import CreateListItemModal from "./CreateListItemModal";
+import CreateListItemModal from "./Modals/CreateListItemModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { DragDropContext } from "react-beautiful-dnd";
 import { nanoid } from "nanoid";
+import EditListItemModal from "./Modals/EditListItemModal";
 
 interface BoardSettings {
   id: string;
@@ -16,6 +17,7 @@ interface BoardSettings {
   updateBoardTitle: any;
   addListItems: any;
   deleteTask: any;
+  saveChanges: any;
 }
 
 export default function Board(props: BoardSettings) {
@@ -31,11 +33,34 @@ export default function Board(props: BoardSettings) {
     },
   ]);
 
+  const [taskInfo, setTaskInfo] = React.useState({
+    taskId: "",
+    taskName: "",
+    taskDesc: "",
+  });
+
   const [showCreateListItemModal, setShowCreateListItemModal] =
     React.useState(false);
 
+  const [showEditListItemModal, setShowEditListItemModal] =
+    React.useState(false);
+
+  function renderEditModal(taskId: string, taskName: string, taskDesc: string) {
+    setTaskInfo({
+      taskId: taskId,
+      taskName: taskName,
+      taskDesc: taskDesc,
+    });
+
+    setShowEditListItemModal((prevState) => !prevState);
+  }
+
   function toggleCreateBoardModal() {
     setShowCreateListItemModal((prevModalState) => !prevModalState);
+  }
+
+  function toggleEditListItemModal() {
+    setShowEditListItemModal((prevModalState) => !prevModalState);
   }
 
   function addListItems(newTask: any) {
@@ -71,7 +96,7 @@ export default function Board(props: BoardSettings) {
     return () => props.updateLS;
   }, [boardTitle]);
 
-  const listItemsContent = props.listTasks.map((data) => {
+  const listItemsContent = props.listTasks.map((data, index) => {
     //Without this if statement it will render an empty array which makes a gap between the board title and the second task becuase task1 is invincible
     if (data.taskName.length > 0) {
       if (boardTitle.id == data.id) {
@@ -80,7 +105,17 @@ export default function Board(props: BoardSettings) {
             <li className="py-3 sm:py-4">
               <div className="flex items-center space-x-4">
                 <div className="shrink-0"></div>
-                <div className="min-w-0 flex-1">
+                <div
+                  className="min-w-0 flex-1"
+                  onClick={() =>
+                    renderEditModal(
+                      data.id2,
+                      data.taskName,
+                      data.taskDescription
+                    )
+                  }
+                  style={{ cursor: "pointer" }}
+                >
                   <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
                     {data.taskName}
                   </p>
@@ -89,9 +124,6 @@ export default function Board(props: BoardSettings) {
                   </p>
                 </div>
                 <div className="inline-flex items-center text-base text-gray-900 dark:text-white">
-                  <Button size="xs" className="mr-1">
-                    <FontAwesomeIcon icon={faPen} />
-                  </Button>
                   <Button
                     size="xs"
                     className="mr-1"
@@ -103,6 +135,16 @@ export default function Board(props: BoardSettings) {
                 </div>
               </div>
             </li>
+            {showEditListItemModal && (
+              <EditListItemModal
+                modalVisable={showEditListItemModal}
+                toggleModal={toggleEditListItemModal}
+                taskName={taskInfo.taskName}
+                taskDesc={taskInfo.taskDesc}
+                taskId={taskInfo.taskId}
+                saveChanges={props.saveChanges}
+              />
+            )}
           </div>
         );
       }
@@ -115,9 +157,6 @@ export default function Board(props: BoardSettings) {
       name: current,
     });
     props.updateBoardTitle(boardTitle.id, current);
-  };
-  const handleEditCancel = () => {
-    console.log("Edit has been canceled");
   };
 
   const handleNameValidationFail = () => {
@@ -139,6 +178,7 @@ export default function Board(props: BoardSettings) {
           </h5>
           <div className="items-end">
             <a
+              style={{ cursor: "pointer" }}
               onClick={() => setShowCreateListItemModal(true)}
               className="mx-1 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
             >
@@ -170,6 +210,8 @@ export default function Board(props: BoardSettings) {
             {listItemsContent.length > 0 && listItemsContent}
           </ul>
         </div>
+        {/* JUST FOR DEBUGGING
+        <span>{boardTitle.id}</span> */}
       </Card>
     </div>
   );

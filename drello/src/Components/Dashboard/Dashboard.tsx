@@ -29,6 +29,16 @@ export default function Dashboard(props: boardHandle) {
     );
   }
 
+  function saveChanges(taskId: string, taskName: string, taskDesc: string) {
+    setItemsBoard((oldItems: any) =>
+      oldItems.map((item: any) => {
+        return item.id2 === taskId
+          ? { ...item, taskName: taskName, taskDescription: taskDesc }
+          : item;
+      })
+    );
+  }
+
   const allBoards = props.boardItems.map((board: any) => {
     return (
       <Board
@@ -41,6 +51,7 @@ export default function Dashboard(props: boardHandle) {
         updateBoardTitle={props.updateBoardTitle}
         addListItems={addListItems}
         deleteTask={deleteTask}
+        saveChanges={saveChanges}
       />
     );
   });

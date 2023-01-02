@@ -2,7 +2,7 @@ import React from "react";
 import Header from "./Components/Navbar/Header";
 import "./App.css";
 import Dashboard from "./Components/Dashboard/Dashboard";
-import CreateBoardModal from "./Components/Dashboard/CreateBoardModal";
+import CreateBoardModal from "./Components/Dashboard/Modals/CreateBoardModal";
 
 function App() {
   const [boardItems, setBoardItems] = React.useState(() =>
