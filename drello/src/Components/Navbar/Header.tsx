@@ -30,6 +30,7 @@ export default function Header(props: boardHandle) {
     const newBoard = {
       id: nanoid(),
       title: title,
+      list: [],
     };
     return props.createBoard(newBoard);
   }

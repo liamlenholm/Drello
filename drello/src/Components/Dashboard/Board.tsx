@@ -7,7 +7,7 @@ import CreateListItemModal from "./CreateListItemModal";
 interface BoardSettings {
   id: string;
   name: string;
-  list: Array<any>;
+  listTasks: Array<any>;
   deleteBoard: any;
   updateLS: any;
   updateBoardTitle: any;
@@ -22,10 +22,10 @@ export default function Board(props: BoardSettings) {
   //List that will be stored in localstorage
   const [list, setList] = React.useState([
     {
-      title: "",
-      description: "",
-      tags: "",
-      id: nanoid(),
+      taskName: "",
+      taskDescription: "",
+      taskTags: "",
+      id: boardTitle.id,
     },
   ]);
 
@@ -36,12 +36,34 @@ export default function Board(props: BoardSettings) {
     setShowCreateListItemModal((prevModalState) => !prevModalState);
   }
 
+  function addListItems(newTask: any) {
+    console.log(newTask);
+    setList((oldTasks: any) =>
+      oldTasks.map((tasks: any) => {
+        console.log(tasks, "TASK");
+        return {
+          ...oldTasks,
+          ...tasks,
+          taskName: newTask.taskName,
+          taskDescription: newTask.taskDescription,
+          taskTags: "none",
+          id: boardTitle.id,
+        };
+      })
+    );
+  }
+
   React.useEffect(() => {
-    console.log("Board 23 ran");
+    props.addListItems(list);
+  }, [list]);
+
+  React.useEffect(() => {
     return () => props.updateLS;
   }, [boardTitle]);
 
   console.log(list, "list in board.tsx");
+
+  const newListData = Array.from(list);
 
   const listItemsContent = list.map((data) => {
     return (
@@ -50,14 +72,14 @@ export default function Board(props: BoardSettings) {
           <div className="shrink-0"></div>
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
-              {data.title}
+              {data.taskName}
             </p>
             <p className="text-ellipsis truncate text-sm max-w-xs text-gray-500 dark:text-gray-400">
-              {data.description}
+              {data.taskDescription}
             </p>
           </div>
           <div className="inline-flex items-center text-base text-gray-900 dark:text-white">
-            {data.tags}
+            {data.taskTags}
           </div>
         </div>
       </li>
@@ -103,6 +125,7 @@ export default function Board(props: BoardSettings) {
               <CreateListItemModal
                 modalVisable={showCreateListItemModal}
                 toggleModal={toggleCreateBoardModal}
+                addListItems={addListItems}
               />
             )}
             <div className="inline-flex mx-1">
@@ -117,7 +140,7 @@ export default function Board(props: BoardSettings) {
         </div>
         <div className="flow-root">
           <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-            {listItemsContent}
+            {listItemsContent.length > 0 && listItemsContent}
           </ul>
         </div>
       </Card>

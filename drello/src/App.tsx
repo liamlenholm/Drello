@@ -38,11 +38,17 @@ function App() {
     );
   }
 
-  function addListItems() {
-    console.log("test");
+  function addListItems(listOfTasks: any) {
+    setBoardItems((oldBoard: any) =>
+      oldBoard.map((board: any) => {
+        console.log(board, "TEST");
+        return board.id === listOfTasks.id
+          ? { ...board, list: listOfTasks }
+          : board;
+      })
+    );
+    console.log(boardItems, "BOARDITEMSSS2222222");
   }
-
-  function updateBoardName() {}
 
   return (
     <div>

@@ -4,11 +4,32 @@ import { Modal, Button, Label, TextInput, Checkbox } from "flowbite-react";
 interface ModalVisable {
   modalVisable: boolean;
   toggleModal: any;
+  addListItems: any;
 }
 
 export default function CreateListItemModal(props: ModalVisable) {
-  function createBoard() {
+  const [formData, setFormData] = React.useState({
+    taskName: "",
+    taskDescription: "",
+  });
+
+  function handleChange(event: any) {
+    setFormData((prevFormData) => {
+      return {
+        ...prevFormData,
+        [event.target.name]: event.target.value,
+      };
+    });
+  }
+
+  function createBoard(taskName: string, taskDescription: string) {
+    const newTask = {
+      taskName: taskName,
+      taskDescription: taskDescription,
+      taskTags: "none",
+    };
     props.toggleModal();
+    props.addListItems(newTask);
   }
   return (
     <Modal
@@ -32,6 +53,8 @@ export default function CreateListItemModal(props: ModalVisable) {
               id="taskName"
               placeholder="Task 1"
               required={true}
+              value={formData.taskName}
+              onChange={handleChange}
             />
           </div>
           <div>
@@ -43,10 +66,18 @@ export default function CreateListItemModal(props: ModalVisable) {
               id="taskDescription"
               placeholder="Finnish Drello"
               required={true}
+              value={formData.taskDescription}
+              onChange={handleChange}
             />
           </div>
           <div className="w-full">
-            <Button onClick={() => createBoard()}>Create Task</Button>
+            <Button
+              onClick={() =>
+                createBoard(formData.taskName, formData.taskDescription)
+              }
+            >
+              Create Task
+            </Button>
           </div>
         </div>
       </Modal.Body>
