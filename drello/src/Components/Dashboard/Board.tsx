@@ -1,9 +1,9 @@
 import React from "react";
 import { Card, Dropdown } from "flowbite-react";
 import Editable from "react-editable-title";
-import { nanoid } from "nanoid";
 import CreateListItemModal from "./CreateListItemModal";
-import { ListFormat } from "typescript";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 interface BoardSettings {
   id: string;
@@ -24,7 +24,7 @@ export default function Board(props: BoardSettings) {
       taskName: "",
       taskDescription: "",
       taskTags: "",
-      id: boardTitle.id,
+      id: "",
     },
   ]);
 
@@ -36,10 +36,8 @@ export default function Board(props: BoardSettings) {
   }
 
   function addListItems(newTask: any) {
-    console.log(newTask);
     setList((oldTasks: any) =>
       oldTasks.map((tasks: any) => {
-        console.log(tasks, "TASK");
         return {
           ...oldTasks,
           ...tasks,
@@ -53,7 +51,11 @@ export default function Board(props: BoardSettings) {
   }
 
   React.useEffect(() => {
-    props.addListItems(list);
+    //Stops it from saving an empty task every site refresh
+    if (list[0]["id"] !== "") {
+      props.addListItems(list);
+      console.log("EFFECT RAN");
+    }
   }, [list]);
 
   React.useEffect(() => {
@@ -79,7 +81,8 @@ export default function Board(props: BoardSettings) {
                 </p>
               </div>
               <div className="inline-flex items-center text-base text-gray-900 dark:text-white">
-                {data.taskTags}
+                <FontAwesomeIcon icon={faPen} size="xs" pull="left" />
+                <FontAwesomeIcon icon={faTrash} size="xs" pull="right" />
               </div>
             </div>
           </li>
@@ -131,7 +134,11 @@ export default function Board(props: BoardSettings) {
               />
             )}
             <div className="inline-flex mx-1">
-              <Dropdown label="Edit" dismissOnClick={false} size="xs">
+              <Dropdown
+                label={<FontAwesomeIcon icon={faPen} />}
+                dismissOnClick={false}
+                size="xs"
+              >
                 <Dropdown.Item>Color</Dropdown.Item>
                 <Dropdown.Item onClick={() => props.deleteBoard(boardTitle.id)}>
                   Delete
