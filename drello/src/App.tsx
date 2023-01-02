@@ -8,7 +8,6 @@ function App() {
   const [boardItems, setBoardItems] = React.useState(() =>
     JSON.parse(localStorage.getItem("boards") || "[]")
   );
-  console.log(boardItems);
 
   React.useEffect(() => {
     localStorage.setItem("boards", JSON.stringify(boardItems));
@@ -16,7 +15,6 @@ function App() {
 
   function createNewBoard(boardItem: any) {
     setBoardItems((prevBoards: any) => [boardItem, ...prevBoards]);
-    console.log(boardItems);
   }
 
   function deleteBoard(boardId: string) {
@@ -32,7 +30,6 @@ function App() {
   function updateBoardTitle(boardId: string, boardName: string) {
     setBoardItems((oldBoard: any) =>
       oldBoard.map((board: any) => {
-        console.log(board, "TEST");
         return board.id === boardId ? { ...board, title: boardName } : board;
       })
     );
@@ -41,13 +38,11 @@ function App() {
   function addListItems(listOfTasks: any) {
     setBoardItems((oldBoard: any) =>
       oldBoard.map((board: any) => {
-        console.log(board, "TEST");
         return board.id === listOfTasks.id
           ? { ...board, list: listOfTasks }
           : board;
       })
     );
-    console.log(boardItems, "BOARDITEMSSS2222222");
   }
 
   return (

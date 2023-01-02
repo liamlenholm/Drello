@@ -45,6 +45,7 @@ export default function Board(props: BoardSettings) {
           taskDescription: newTask.taskDescription,
           taskTags: "none",
           id: boardTitle.id,
+          key: boardTitle.id,
         };
       })
     );
@@ -54,15 +55,12 @@ export default function Board(props: BoardSettings) {
     //Stops it from saving an empty task every site refresh
     if (list[0]["id"] !== "") {
       props.addListItems(list);
-      console.log("EFFECT RAN");
     }
   }, [list]);
 
   React.useEffect(() => {
     return () => props.updateLS;
   }, [boardTitle]);
-
-  console.log(props.listTasks, "list in board.tsx");
 
   const listItemsContent = props.listTasks.map((data) => {
     //Without this if statement it will render an empty array which makes a gap between the board title and the second task becuase task1 is invincible
@@ -107,8 +105,8 @@ export default function Board(props: BoardSettings) {
   };
 
   return (
-    <div className="max-w-fit inline-grid mx-3 mt-2" key={boardTitle.id}>
-      <Card>
+    <div className="max-w-fit inline-grid mx-3 mt-2">
+      <Card key={boardTitle.id}>
         <div className="mb-4 flex items-center justify-between">
           <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">
             <Editable

@@ -24,7 +24,6 @@ export default function Dashboard(props: boardHandle) {
   }
 
   const allBoards = props.boardItems.map((board: any) => {
-    console.log(board, "BOARDD");
     return (
       <Board
         name={board.title}
