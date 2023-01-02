@@ -3,6 +3,7 @@ import { Card, Dropdown } from "flowbite-react";
 import Editable from "react-editable-title";
 import { nanoid } from "nanoid";
 import CreateListItemModal from "./CreateListItemModal";
+import { ListFormat } from "typescript";
 
 interface BoardSettings {
   id: string;
@@ -16,8 +17,6 @@ interface BoardSettings {
 
 export default function Board(props: BoardSettings) {
   const [boardTitle, setBoardTitle] = React.useState(props);
-  //Checks if board is in focus for the handleName functions
-  const [focused, setFocused] = React.useState(false);
 
   //List that will be stored in localstorage
   const [list, setList] = React.useState([
@@ -61,29 +60,32 @@ export default function Board(props: BoardSettings) {
     return () => props.updateLS;
   }, [boardTitle]);
 
-  console.log(list, "list in board.tsx");
+  console.log(props.listTasks, "list in board.tsx");
 
-  const newListData = Array.from(list);
-
-  const listItemsContent = list.map((data) => {
-    return (
-      <li className="py-3 sm:py-4">
-        <div className="flex items-center space-x-4">
-          <div className="shrink-0"></div>
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
-              {data.taskName}
-            </p>
-            <p className="text-ellipsis truncate text-sm max-w-xs text-gray-500 dark:text-gray-400">
-              {data.taskDescription}
-            </p>
-          </div>
-          <div className="inline-flex items-center text-base text-gray-900 dark:text-white">
-            {data.taskTags}
-          </div>
-        </div>
-      </li>
-    );
+  const listItemsContent = props.listTasks.map((data) => {
+    //Without this if statement it will render an empty array which makes a gap between the board title and the second task becuase task1 is invincible
+    if (data.taskName.length > 0) {
+      if (boardTitle.id == data.id) {
+        return (
+          <li className="py-3 sm:py-4">
+            <div className="flex items-center space-x-4">
+              <div className="shrink-0"></div>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
+                  {data.taskName}
+                </p>
+                <p className="text-ellipsis truncate text-sm max-w-xs text-gray-500 dark:text-gray-400">
+                  {data.taskDescription}
+                </p>
+              </div>
+              <div className="inline-flex items-center text-base text-gray-900 dark:text-white">
+                {data.taskTags}
+              </div>
+            </div>
+          </li>
+        );
+      }
+    }
   });
 
   const handleNameUpdate = (current: string) => {

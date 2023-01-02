@@ -11,11 +11,16 @@ interface boardHandle {
 }
 
 export default function Dashboard(props: boardHandle) {
-  const [itemsBoard, setItemsBoard] = React.useState();
+  const [itemsBoard, setItemsBoard] = React.useState(() =>
+    JSON.parse(localStorage.getItem("tasks") || "[]")
+  );
+
+  React.useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(itemsBoard));
+  }, [itemsBoard]);
 
   function addListItems(list: any) {
-    props.addListItems(list);
-    console.log("ADD listitems in Dashboard Ran");
+    setItemsBoard(itemsBoard.concat(list));
   }
 
   const allBoards = props.boardItems.map((board: any) => {
@@ -23,7 +28,7 @@ export default function Dashboard(props: boardHandle) {
     return (
       <Board
         name={board.title}
-        listTasks={board.list}
+        listTasks={itemsBoard}
         key={board.id}
         id={board.id}
         deleteBoard={props.deleteBoard}
