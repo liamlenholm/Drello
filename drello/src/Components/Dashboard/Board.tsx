@@ -4,9 +4,9 @@ import Editable from "react-editable-title";
 import CreateListItemModal from "./Modals/CreateListItemModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { DragDropContext } from "react-beautiful-dnd";
 import { nanoid } from "nanoid";
 import EditListItemModal from "./Modals/EditListItemModal";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 
 interface BoardSettings {
   id: string;
@@ -20,11 +20,14 @@ interface BoardSettings {
   saveChanges: any;
   getAllBoards: any;
   changeTaskLocation: any;
+  saveDndState: any;
 }
 
 export default function Board(props: BoardSettings) {
   const [boardTitle, setBoardTitle] = React.useState(props);
 
+  //For Drag n Drop
+  const [dndTasks, setDndTasks] = React.useState(props.listTasks);
   //List that will be stored in localstorage
   const [list, setList] = React.useState([
     {
@@ -67,7 +70,7 @@ export default function Board(props: BoardSettings) {
 
   function addListItems(newTask: any) {
     setList((oldTasks: any) =>
-      oldTasks.map((tasks: any) => {
+      oldTasks.map((tasks: any, index: number) => {
         return {
           ...oldTasks,
           ...tasks,
@@ -78,9 +81,20 @@ export default function Board(props: BoardSettings) {
           key: boardTitle.id,
           //ID2 is for the deleteTask func
           id2: nanoid(),
+          index:
+            props.listTasks.length > 0
+              ? parseInt(props.listTasks.at(-1).index) + 1
+              : "1",
         };
       })
     );
+  }
+
+  function handleOnDragEnd(result: any) {
+    const items = Array.from(dndTasks);
+    const [reorderItems] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderItems);
+    setDndTasks(items);
   }
 
   function deleteTask(taskId: string) {
@@ -98,45 +112,59 @@ export default function Board(props: BoardSettings) {
     return () => props.updateLS;
   }, [boardTitle]);
 
+  React.useEffect(() => {
+    props.saveDndState(dndTasks);
+  }, [dndTasks]);
+
   const listItemsContent = props.listTasks.map((data, index) => {
     //Without this if statement it will render an empty array which makes a gap between the board title and the second task becuase task1 is invincible
     if (data.taskName.length > 0) {
       if (boardTitle.id == data.id) {
         return (
-          <div>
-            <li className="py-3 sm:py-4">
-              <div className="flex items-center space-x-4">
-                <div className="shrink-0"></div>
-                <div
-                  className="min-w-0 flex-1"
-                  onClick={() =>
-                    renderEditModal(
-                      data.id2,
-                      data.taskName,
-                      data.taskDescription
-                    )
-                  }
-                  style={{ cursor: "pointer" }}
+          <div key={data.id2}>
+            <Draggable draggableId={data.id2} key={data.id2} index={index}>
+              {(provided) => (
+                <li
+                  className="py-3 sm:py-4"
+                  {...provided.draggableProps}
+                  {...provided.dragHandleProps}
+                  ref={provided.innerRef}
                 >
-                  <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
-                    {data.taskName}
-                  </p>
-                  <p className="text-ellipsis truncate text-sm max-w-xs text-gray-500 dark:text-gray-400">
-                    {data.taskDescription}
-                  </p>
-                </div>
-                <div className="inline-flex items-center text-base text-gray-900 dark:text-white">
-                  <Button
-                    size="xs"
-                    className="mr-1"
-                    color="failure"
-                    onClick={() => deleteTask(data.id2)}
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                  </Button>
-                </div>
-              </div>
-            </li>
+                  <div className="flex items-center space-x-4">
+                    <div className="shrink-0"></div>
+                    <div
+                      className="min-w-0 flex-1"
+                      onClick={() =>
+                        renderEditModal(
+                          data.id2,
+                          data.taskName,
+                          data.taskDescription
+                        )
+                      }
+                      style={{ cursor: "pointer" }}
+                    >
+                      <p className="truncate text-sm font-medium text-gray-900 dark:text-white">
+                        {data.taskName}
+                      </p>
+                      <p className="text-ellipsis truncate text-sm max-w-xs text-gray-500 dark:text-gray-400">
+                        {data.taskDescription}
+                      </p>
+                    </div>
+                    <div className="inline-flex items-center text-base text-gray-900 dark:text-white">
+                      <Button
+                        size="xs"
+                        className="mr-1"
+                        color="failure"
+                        onClick={() => deleteTask(data.id2)}
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </Button>
+                    </div>
+                  </div>
+                </li>
+              )}
+            </Draggable>
+
             {showEditListItemModal && (
               <EditListItemModal
                 modalVisable={showEditListItemModal}
@@ -168,59 +196,74 @@ export default function Board(props: BoardSettings) {
   };
 
   return (
-    <div className="max-w-fit inline-grid mx-3 mt-2">
-      <Card key={boardTitle.id}>
-        <div className="mb-4 flex items-center justify-between">
-          <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">
-            <Editable
-              text={boardTitle.name}
-              seamlessInput
-              placeholder="Board Name"
-              cb={handleNameUpdate}
-              onValidationFail={handleNameValidationFail}
-            />
-          </h5>
-          <div className="items-end">
-            <a
-              style={{ cursor: "pointer" }}
-              onClick={() => setShowCreateListItemModal(true)}
-              className="mx-1 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
-            >
-              Add Task
-            </a>
-            {showCreateListItemModal && (
-              <CreateListItemModal
-                modalVisable={showCreateListItemModal}
-                toggleModal={toggleCreateBoardModal}
-                addListItems={addListItems}
+    <DragDropContext onDragEnd={handleOnDragEnd}>
+      <div className="max-w-fit inline-grid mx-3 mt-2">
+        <Card>
+          <div className="mb-4 flex items-center justify-between">
+            <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">
+              <Editable
+                text={boardTitle.name}
+                seamlessInput
+                placeholder="Board Name"
+                cb={handleNameUpdate}
+                onValidationFail={handleNameValidationFail}
               />
-            )}
-            <div className="inline-flex mx-1">
-              <Dropdown
-                label={<FontAwesomeIcon icon={faPen} />}
-                dismissOnClick={false}
-                size="xs"
+            </h5>
+            <div className="items-end">
+              <a
+                style={{ cursor: "pointer" }}
+                onClick={() => setShowCreateListItemModal(true)}
+                className="mx-1 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
               >
-                <Dropdown.Item>Color</Dropdown.Item>
-                <Dropdown.Item onClick={() => props.deleteBoard(boardTitle.id)}>
-                  Delete
-                </Dropdown.Item>
-              </Dropdown>
+                Add Task
+              </a>
+              {showCreateListItemModal && (
+                <CreateListItemModal
+                  modalVisable={showCreateListItemModal}
+                  toggleModal={toggleCreateBoardModal}
+                  addListItems={addListItems}
+                />
+              )}
+              <div className="inline-flex mx-1">
+                <Dropdown
+                  label={<FontAwesomeIcon icon={faPen} />}
+                  dismissOnClick={false}
+                  size="xs"
+                >
+                  <Dropdown.Item>Color</Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => props.deleteBoard(boardTitle.id)}
+                  >
+                    Delete
+                  </Dropdown.Item>
+                </Dropdown>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="flow-root">
-          <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-            {listItemsContent.length > 0 && listItemsContent}
-          </ul>
-        </div>
-        {/* JUST FOR DEBUGGING */}
-        <span style={{ fontSize: "10px", opacity: "50%" }}>
-          JUST FOR DEBUGGIN
-          <br />
-          {boardTitle.id}
-        </span>
-      </Card>
-    </div>
+
+          <div className="flow-root">
+            <Droppable droppableId="tasks">
+              {(provided) => (
+                <ul
+                  className="divide-y divide-gray-200 dark:divide-gray-700"
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {listItemsContent.length > 0 && listItemsContent}
+                  {provided.placeholder}
+                </ul>
+              )}
+            </Droppable>
+          </div>
+
+          {/* JUST FOR DEBUGGING */}
+          <span style={{ fontSize: "10px", opacity: "50%" }}>
+            JUST FOR DEBUGGIN
+            <br />
+            {boardTitle.id}
+          </span>
+        </Card>
+      </div>
+    </DragDropContext>
   );
 }

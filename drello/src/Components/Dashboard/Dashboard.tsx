@@ -39,7 +39,6 @@ export default function Dashboard(props: boardHandle) {
     );
   }
 
-  console.log(itemsBoard);
   function changeTaskLocation(taskId: string, boardId: string) {
     setItemsBoard((oldItems: any) =>
       oldItems.map((item: any) => {
@@ -56,13 +55,17 @@ export default function Dashboard(props: boardHandle) {
     return props.boardItems;
   }
 
-  const allBoards = props.boardItems.map((board: any) => {
+  function saveDndState(state: any) {
+    setItemsBoard(state);
+  }
+
+  const allBoards = props.boardItems.map((board: any, index: number) => {
     return (
       <Board
         name={board.title}
         listTasks={itemsBoard}
-        key={board.id}
         id={board.id}
+        key={board.id}
         deleteBoard={props.deleteBoard}
         updateLS={props.updateLS}
         updateBoardTitle={props.updateBoardTitle}
@@ -71,6 +74,7 @@ export default function Dashboard(props: boardHandle) {
         saveChanges={saveChanges}
         getAllBoards={getAllBoards}
         changeTaskLocation={changeTaskLocation}
+        saveDndState={saveDndState}
       />
     );
   });
