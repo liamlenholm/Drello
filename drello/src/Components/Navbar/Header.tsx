@@ -4,9 +4,12 @@ import Contact from "./Contact";
 import About from "./About";
 import CreateBoardModal from "../Dashboard/Modals/CreateBoardModal";
 import { nanoid } from "nanoid";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMoon } from "@fortawesome/free-solid-svg-icons";
 
 interface boardHandle {
   createBoard: any;
+  darkModeSwitch: any;
 }
 
 export default function Header(props: boardHandle) {
@@ -47,7 +50,16 @@ export default function Header(props: boardHandle) {
           Drello
         </span>
       </Navbar.Brand>
-      <div className="flex md:order-2">
+
+      <div className="flex md:order-2 gap-3 align-middle">
+        <FontAwesomeIcon
+          icon={faMoon}
+          size="xl"
+          color="#1a56db"
+          style={{ paddingTop: "10px", cursor: "pointer" }}
+          onClick={props.darkModeSwitch}
+        />
+
         <Button onClick={() => setShowCreateBoardModal(true)}>
           Create Board
         </Button>

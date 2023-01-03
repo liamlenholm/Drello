@@ -169,85 +169,59 @@ export default function Board(props: BoardSettings) {
   };
 
   return (
-    <DragDropContext onDragEnd={() => console.log("loaded")}>
-      <Droppable droppableId="boards">
-        {(provided) => (
-          <div
-            className="max-w-fit inline-grid mx-3 mt-2"
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-          >
-            <Draggable
-              key={boardTitle.id}
-              draggableId={boardTitle.id}
-              index={props.currIndex}
+    <div className="max-w-fit inline-grid mx-3 mt-2">
+      <Card>
+        <div className="mb-4 flex items-center justify-between">
+          <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">
+            <Editable
+              text={boardTitle.name}
+              seamlessInput
+              placeholder="Board Name"
+              cb={handleNameUpdate}
+              onValidationFail={handleNameValidationFail}
+            />
+          </h5>
+          <div className="items-end">
+            <a
+              style={{ cursor: "pointer" }}
+              onClick={() => setShowCreateListItemModal(true)}
+              className="mx-1 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
             >
-              {(provided) => (
-                <div ref={provided.innerRef}>
-                  <Card
-                    {...provided.dragHandleProps}
-                    {...provided.draggableProps}
-                  >
-                    <div className="mb-4 flex items-center justify-between">
-                      <h5 className="text-xl font-bold leading-none text-gray-900 dark:text-white">
-                        <Editable
-                          text={boardTitle.name}
-                          seamlessInput
-                          placeholder="Board Name"
-                          cb={handleNameUpdate}
-                          onValidationFail={handleNameValidationFail}
-                        />
-                      </h5>
-                      <div className="items-end">
-                        <a
-                          style={{ cursor: "pointer" }}
-                          onClick={() => setShowCreateListItemModal(true)}
-                          className="mx-1 text-sm font-medium text-blue-600 hover:underline dark:text-blue-500"
-                        >
-                          Add Task
-                        </a>
-                        {showCreateListItemModal && (
-                          <CreateListItemModal
-                            modalVisable={showCreateListItemModal}
-                            toggleModal={toggleCreateBoardModal}
-                            addListItems={addListItems}
-                          />
-                        )}
-                        <div className="inline-flex mx-1">
-                          <Dropdown
-                            label={<FontAwesomeIcon icon={faPen} />}
-                            dismissOnClick={false}
-                            size="xs"
-                          >
-                            <Dropdown.Item>Color</Dropdown.Item>
-                            <Dropdown.Item
-                              onClick={() => props.deleteBoard(boardTitle.id)}
-                            >
-                              Delete
-                            </Dropdown.Item>
-                          </Dropdown>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flow-root">
-                      <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-                        {listItemsContent.length > 0 && listItemsContent}
-                      </ul>
-                    </div>
-                    {/* JUST FOR DEBUGGING */}
-                    <span style={{ fontSize: "10px", opacity: "50%" }}>
-                      JUST FOR DEBUGGIN
-                      <br />
-                      {boardTitle.id}
-                    </span>
-                  </Card>
-                </div>
-              )}
-            </Draggable>
-            {provided.placeholder}
+              Add Task
+            </a>
+            {showCreateListItemModal && (
+              <CreateListItemModal
+                modalVisable={showCreateListItemModal}
+                toggleModal={toggleCreateBoardModal}
+                addListItems={addListItems}
+              />
+            )}
+            <div className="inline-flex mx-1">
+              <Dropdown
+                label={<FontAwesomeIcon icon={faPen} />}
+                dismissOnClick={false}
+                size="xs"
+              >
+                <Dropdown.Item>Color</Dropdown.Item>
+                <Dropdown.Item onClick={() => props.deleteBoard(boardTitle.id)}>
+                  Delete
+                </Dropdown.Item>
+              </Dropdown>
+            </div>
           </div>
-        )}
-      </Droppable>
-    </DragDropContext>
+        </div>
+        <div className="flow-root">
+          <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+            {listItemsContent.length > 0 && listItemsContent}
+          </ul>
+        </div>
+        {/* JUST FOR DEBUGGING */}
+        <span style={{ fontSize: "10px", opacity: "50%" }}>
+          JUST FOR DEBUGGIN
+          <br />
+          {boardTitle.id}
+        </span>
+      </Card>
+    </div>
   );
 }

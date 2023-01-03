@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid";
 import React from "react";
 import Board from "./Board";
+import { Droppable, DragDropContext } from "@hello-pangea/dnd";
 
 interface boardHandle {
   boardItems: any;

@@ -2,13 +2,13 @@ import React from "react";
 import Header from "./Components/Navbar/Header";
 import "./App.css";
 import Dashboard from "./Components/Dashboard/Dashboard";
+
 import CreateBoardModal from "./Components/Dashboard/Modals/CreateBoardModal";
 
 function App() {
   const [boardItems, setBoardItems] = React.useState(() =>
     JSON.parse(localStorage.getItem("boards") || "[]")
   );
-
   React.useEffect(() => {
     localStorage.setItem("boards", JSON.stringify(boardItems));
   }, [boardItems]);
@@ -45,9 +45,31 @@ function App() {
     );
   }
 
+  //Darkmode switch
+  const [darkMode, setDarkMode] = React.useState(() =>
+    JSON.parse(localStorage.getItem("theme") || "[]")
+  );
+
+  React.useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      document.body.style.backgroundColor = "#1b2431";
+    } else {
+      document.documentElement.classList.remove("dark");
+      document.body.style.backgroundColor = "#ffffff";
+    }
+  }, [darkMode]);
+
+  function darkModeSwitch() {
+    setDarkMode((prevMode: any) => !prevMode);
+  }
+  React.useEffect(() => {
+    localStorage.setItem("theme", JSON.stringify(darkMode));
+  }, [darkMode]);
+
   return (
     <div>
-      <Header createBoard={createNewBoard} />
+      <Header createBoard={createNewBoard} darkModeSwitch={darkModeSwitch} />
       <Dashboard
         boardItems={boardItems}
         deleteBoard={deleteBoard}
