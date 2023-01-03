@@ -39,6 +39,10 @@ export default function Dashboard(props: boardHandle) {
     );
   }
 
+  function getAllBoards() {
+    return props.boardItems;
+  }
+
   const allBoards = props.boardItems.map((board: any) => {
     return (
       <Board
@@ -52,6 +56,7 @@ export default function Dashboard(props: boardHandle) {
         addListItems={addListItems}
         deleteTask={deleteTask}
         saveChanges={saveChanges}
+        getAllBoards={getAllBoards}
       />
     );
   });

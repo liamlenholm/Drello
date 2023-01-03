@@ -18,6 +18,7 @@ interface BoardSettings {
   addListItems: any;
   deleteTask: any;
   saveChanges: any;
+  getAllBoards: any;
 }
 
 export default function Board(props: BoardSettings) {
@@ -85,6 +86,14 @@ export default function Board(props: BoardSettings) {
     props.deleteTask(taskId);
   }
 
+  function changeTaskLocation(
+    taskId: string,
+    boardId1: string,
+    boardId2: string
+  ) {
+    console.log(taskId, boardId1, boardId2);
+  }
+
   React.useEffect(() => {
     //Stops it from saving an empty task every site refresh
     if (list[0]["taskName"] !== "") {
@@ -143,6 +152,8 @@ export default function Board(props: BoardSettings) {
                 taskDesc={taskInfo.taskDesc}
                 taskId={taskInfo.taskId}
                 saveChanges={props.saveChanges}
+                getAllBoards={props.getAllBoards}
+                changeTaskLocation={changeTaskLocation}
               />
             )}
           </div>
@@ -210,8 +221,8 @@ export default function Board(props: BoardSettings) {
             {listItemsContent.length > 0 && listItemsContent}
           </ul>
         </div>
-        {/* JUST FOR DEBUGGING
-        <span>{boardTitle.id}</span> */}
+        {/* JUST FOR DEBUGGING */}
+        <span>{boardTitle.id}</span>
       </Card>
     </div>
   );

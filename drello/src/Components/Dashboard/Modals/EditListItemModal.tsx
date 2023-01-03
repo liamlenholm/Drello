@@ -1,5 +1,12 @@
 import React from "react";
-import { Modal, Button, Label, TextInput, Textarea } from "flowbite-react";
+import {
+  Modal,
+  Button,
+  Label,
+  TextInput,
+  Textarea,
+  Dropdown,
+} from "flowbite-react";
 
 interface ModalVisable {
   modalVisable: boolean;
@@ -8,6 +15,8 @@ interface ModalVisable {
   taskDesc: string;
   taskId: string;
   saveChanges: any;
+  getAllBoards: any;
+  changeTaskLocation: any;
 }
 
 export default function EditListItemModal(props: ModalVisable) {
@@ -36,6 +45,19 @@ export default function EditListItemModal(props: ModalVisable) {
       taskId: props.taskId,
     });
   }
+  const allBoards = props.getAllBoards();
+  const renderAllBoards = allBoards.map((data: any) => {
+    return (
+      //Sends TaskID and current board
+      <Dropdown.Item
+        onClick={() =>
+          props.changeTaskLocation(formData.taskId, data.id, data.id2)
+        }
+      >
+        {data.title}
+      </Dropdown.Item>
+    );
+  });
 
   return (
     <Modal
@@ -76,7 +98,8 @@ export default function EditListItemModal(props: ModalVisable) {
               onChange={handleChange}
             />
           </div>
-          <div className="w-full">
+
+          <div className="w-full flex justify-between">
             <Button
               onClick={() => {
                 props.saveChanges(
@@ -89,6 +112,10 @@ export default function EditListItemModal(props: ModalVisable) {
             >
               Save Changes
             </Button>
+
+            <div className="">
+              <Dropdown label="Move to">{renderAllBoards}</Dropdown>
+            </div>
           </div>
         </div>
       </Modal.Body>
