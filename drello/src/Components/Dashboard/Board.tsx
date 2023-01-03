@@ -4,7 +4,6 @@ import Editable from "react-editable-title";
 import CreateListItemModal from "./Modals/CreateListItemModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { DragDropContext } from "react-beautiful-dnd";
 import { nanoid } from "nanoid";
 import EditListItemModal from "./Modals/EditListItemModal";
 
