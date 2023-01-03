@@ -56,7 +56,7 @@ export default function Dashboard(props: boardHandle) {
     return props.boardItems;
   }
 
-  const allBoards = props.boardItems.map((board: any) => {
+  const allBoards = props.boardItems.map((board: any, index: number) => {
     return (
       <Board
         name={board.title}
@@ -71,6 +71,7 @@ export default function Dashboard(props: boardHandle) {
         saveChanges={saveChanges}
         getAllBoards={getAllBoards}
         changeTaskLocation={changeTaskLocation}
+        currIndex={index}
       />
     );
   });
