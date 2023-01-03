@@ -48,11 +48,12 @@ export default function EditListItemModal(props: ModalVisable) {
   const allBoards = props.getAllBoards();
   const renderAllBoards = allBoards.map((data: any) => {
     return (
-      //Sends TaskID and current board
+      //Sends TaskID and choosen board ID
       <Dropdown.Item
-        onClick={() =>
-          props.changeTaskLocation(formData.taskId, data.id, data.id2)
-        }
+        onClick={() => {
+          props.changeTaskLocation(formData.taskId, data.id);
+          props.toggleModal();
+        }}
       >
         {data.title}
       </Dropdown.Item>

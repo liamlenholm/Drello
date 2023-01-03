@@ -39,6 +39,19 @@ export default function Dashboard(props: boardHandle) {
     );
   }
 
+  console.log(itemsBoard);
+  function changeTaskLocation(taskId: string, boardId: string) {
+    setItemsBoard((oldItems: any) =>
+      oldItems.map((item: any) => {
+        if (item.id2 === taskId) {
+          return { ...item, id: boardId };
+        } else {
+          return item;
+        }
+      })
+    );
+  }
+
   function getAllBoards() {
     return props.boardItems;
   }
@@ -57,6 +70,7 @@ export default function Dashboard(props: boardHandle) {
         deleteTask={deleteTask}
         saveChanges={saveChanges}
         getAllBoards={getAllBoards}
+        changeTaskLocation={changeTaskLocation}
       />
     );
   });
