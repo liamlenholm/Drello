@@ -4,6 +4,7 @@ import "./App.css";
 import Dashboard from "./Components/Dashboard/Dashboard";
 
 import CreateBoardModal from "./Components/Dashboard/Modals/CreateBoardModal";
+import { arrayMoveImmutable } from "array-move";
 
 function App() {
   const [boardItems, setBoardItems] = React.useState(() =>
@@ -13,7 +14,7 @@ function App() {
     localStorage.setItem("boards", JSON.stringify(boardItems));
   }, [boardItems]);
 
-  function createNewBoard(boardItem: any) {
+  function createNewBoard(boardItem: any, index: number) {
     setBoardItems((prevBoards: any) => [boardItem, ...prevBoards]);
   }
 
@@ -45,6 +46,18 @@ function App() {
     );
   }
 
+  function moveRight(boardId: string, currentIndex: number) {
+    console.log(boardItems, "BEFORE");
+    setBoardItems((oldBoard: any) =>
+      oldBoard.map((board: any) => {
+        return board.id === boardId
+          ? { ...board, index: board.index + 1 }
+          : board;
+      })
+    );
+    console.log(boardItems, "AFTER");
+  }
+
   //Darkmode switch
   const [darkMode, setDarkMode] = React.useState(() =>
     JSON.parse(localStorage.getItem("theme") || "[]")
@@ -69,13 +82,18 @@ function App() {
 
   return (
     <div>
-      <Header createBoard={createNewBoard} darkModeSwitch={darkModeSwitch} />
+      <Header
+        createBoard={createNewBoard}
+        darkModeSwitch={darkModeSwitch}
+        boardItemsLenght={boardItems.length}
+      />
       <Dashboard
         boardItems={boardItems}
         deleteBoard={deleteBoard}
         updateLS={updateLS}
         updateBoardTitle={updateBoardTitle}
         addListItems={addListItems}
+        moveRight={moveRight}
       />
     </div>
   );

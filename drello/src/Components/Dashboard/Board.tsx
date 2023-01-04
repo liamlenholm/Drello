@@ -3,10 +3,13 @@ import { Card, Dropdown, Button } from "flowbite-react";
 import Editable from "react-editable-title";
 import CreateListItemModal from "./Modals/CreateListItemModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPen,
+  faTrash,
+  faArrowRight,
+} from "@fortawesome/free-solid-svg-icons";
 import { nanoid } from "nanoid";
 import EditListItemModal from "./Modals/EditListItemModal";
-import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 
 interface BoardSettings {
   id: string;
@@ -21,6 +24,7 @@ interface BoardSettings {
   getAllBoards: any;
   changeTaskLocation: any;
   currIndex: number;
+  moveRight: any;
 }
 
 export default function Board(props: BoardSettings) {
@@ -215,6 +219,16 @@ export default function Board(props: BoardSettings) {
             {listItemsContent.length > 0 && listItemsContent}
           </ul>
         </div>
+        <div className="align-sub">
+          <FontAwesomeIcon
+            icon={faArrowRight}
+            pull="right"
+            opacity={"50%"}
+            style={{ cursor: "pointer" }}
+            onClick={() => props.moveRight(boardTitle.id, boardTitle.currIndex)}
+          />
+        </div>
+
         {/* JUST FOR DEBUGGING */}
         <span style={{ fontSize: "10px", opacity: "50%" }}>
           JUST FOR DEBUGGIN

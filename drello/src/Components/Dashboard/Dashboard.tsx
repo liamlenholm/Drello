@@ -1,7 +1,6 @@
-import { nanoid } from "nanoid";
 import React from "react";
 import Board from "./Board";
-import { Droppable, DragDropContext } from "@hello-pangea/dnd";
+import { arrayMoveImmutable } from "array-move";
 
 interface boardHandle {
   boardItems: any;
@@ -9,6 +8,7 @@ interface boardHandle {
   updateLS: any;
   updateBoardTitle: any;
   addListItems: any;
+  moveRight: any;
 }
 
 export default function Dashboard(props: boardHandle) {
@@ -73,6 +73,7 @@ export default function Dashboard(props: boardHandle) {
         getAllBoards={getAllBoards}
         changeTaskLocation={changeTaskLocation}
         currIndex={index}
+        moveRight={props.moveRight}
       />
     );
   });

@@ -10,6 +10,7 @@ import { faMoon } from "@fortawesome/free-solid-svg-icons";
 interface boardHandle {
   createBoard: any;
   darkModeSwitch: any;
+  boardItemsLenght: any;
 }
 
 export default function Header(props: boardHandle) {
@@ -34,6 +35,7 @@ export default function Header(props: boardHandle) {
       id: nanoid(),
       title: title,
       list: [],
+      index: props.boardItemsLenght,
     };
     return props.createBoard(newBoard);
   }
