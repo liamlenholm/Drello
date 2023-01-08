@@ -1,0 +1,33 @@
+.dot {
+  height: 25px;
+  width: 25px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  font-family: sans-serif;
+  font-size: 0;
+  cursor: pointer;
+}
+
+.green {
+  background-color: green;
+}
+
+.red {
+  background-color: red;
+}
+
+.blue {
+  background-color: blue;
+}
+
+.cyan {
+  background-color: cyan;
+}
+
+.selected {
+  font-family: sans-serif;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+}

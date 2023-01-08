@@ -7,6 +7,7 @@ import {
   Textarea,
   Dropdown,
 } from "flowbite-react";
+import "../Modals/modals.css";
 
 interface ModalVisable {
   modalVisable: boolean;
@@ -25,6 +26,8 @@ export default function EditListItemModal(props: ModalVisable) {
     taskDescription: "",
     taskId: "",
   });
+
+  const [selected, setSelected] = React.useState(false);
 
   function handleChange(event: any) {
     setFormData((prevFormData) => {
@@ -45,6 +48,15 @@ export default function EditListItemModal(props: ModalVisable) {
       taskId: props.taskId,
     });
   }
+
+  function selectedColor() {
+    setSelected((prevState) => !prevState);
+    console.log(selected);
+    console.log(isSelected);
+  }
+
+  let isSelected = selected ? "selected" : "";
+
   const allBoards = props.getAllBoards();
   const renderAllBoards = allBoards.map((data: any) => {
     return (
@@ -113,6 +125,23 @@ export default function EditListItemModal(props: ModalVisable) {
             >
               Save Changes
             </Button>
+
+            <div className="flex gap-2 items-center">
+              <span
+                className={`dot green ${isSelected}`}
+                onClick={selectedColor}
+              >
+                ✔
+              </span>
+              <span className={`dot blue ${isSelected}`}>✔</span>
+              <span className={`dot red ${isSelected}`}>✔</span>
+              <span
+                className={`dot cyan ${isSelected}`}
+                onClick={selectedColor}
+              >
+                ✔
+              </span>
+            </div>
 
             <div className="">
               <Dropdown label="Move to">{renderAllBoards}</Dropdown>

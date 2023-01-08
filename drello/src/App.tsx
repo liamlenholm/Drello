@@ -3,9 +3,6 @@ import Header from "./Components/Navbar/Header";
 import "./App.css";
 import Dashboard from "./Components/Dashboard/Dashboard";
 
-import CreateBoardModal from "./Components/Dashboard/Modals/CreateBoardModal";
-import { arrayMoveImmutable } from "array-move";
-
 function App() {
   const [boardItems, setBoardItems] = React.useState(() =>
     JSON.parse(localStorage.getItem("boards") || "[]")
