@@ -8,6 +8,7 @@ import {
   Dropdown,
 } from "flowbite-react";
 import "../Modals/modals.css";
+import { nanoid } from "nanoid";
 
 interface ModalVisable {
   modalVisable: boolean;
@@ -75,7 +76,8 @@ export default function EditListItemModal(props: ModalVisable) {
   const avalibleColors = props.allColors.map((data: any) => {
     let selectedColor = data === formData.taskColor;
     return (
-      <span
+      <span 
+        key={nanoid()}
         onClick={() => setColor(data)}
         className={`dot ${data} ${selectedColor ? "selected" : ""}`}
       >
@@ -93,7 +95,7 @@ export default function EditListItemModal(props: ModalVisable) {
     >
       <Modal.Header />
       <Modal.Body>
-        <div className="space-y-6 px-6 pb-4 sm:pb-6 lg:px-8 xl:pb-8">
+        <div className="space-y-6 px-6 pb-4 sm:pb-6 lg:px-8 xl:pb-8" key={nanoid()}>
           <h3 className="text-xl font-medium text-gray-900 dark:text-white">
             Edit Task
           </h3>

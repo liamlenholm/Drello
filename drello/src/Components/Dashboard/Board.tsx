@@ -179,7 +179,6 @@ export default function Board(props: BoardSettings) {
     console.log("Rename has failed");
   };
 
-  console.log(props.listTasks);
 
   return (
     <div className="max-w-fit inline-grid mx-3 mt-2">
