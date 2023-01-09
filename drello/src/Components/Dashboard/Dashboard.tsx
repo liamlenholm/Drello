@@ -1,11 +1,9 @@
 import React from "react";
 import Board from "./Board";
-import { arrayMoveImmutable } from "array-move";
 
 interface boardHandle {
   boardItems: any;
   deleteBoard: any;
-  updateLS: any;
   updateBoardTitle: any;
   addListItems: any;
   moveRight: any;
@@ -24,12 +22,14 @@ export default function Dashboard(props: boardHandle) {
     setItemsBoard(itemsBoard.concat(list));
   }
 
+  //Delete Task - TaskID recieved from Board
   function deleteTask(TaskID: string) {
     setItemsBoard((oldItemsBoard: any) =>
       oldItemsBoard.filter((items: any) => items.id2 !== TaskID)
     );
   }
 
+  //Save Changes after Editing in EditListItemModal
   function saveChanges(
     taskId: string,
     taskName: string,
@@ -50,7 +50,7 @@ export default function Dashboard(props: boardHandle) {
     );
   }
 
-  console.log(itemsBoard);
+  //Move task to diffrent board
   function changeTaskLocation(taskId: string, boardId: string) {
     setItemsBoard((oldItems: any) =>
       oldItems.map((item: any) => {
@@ -71,19 +71,21 @@ export default function Dashboard(props: boardHandle) {
     return (
       <Board
         name={board.title}
+        //TASKS
         listTasks={itemsBoard}
         key={board.id}
         id={board.id}
+        //FUNCTIONS
         deleteBoard={props.deleteBoard}
-        updateLS={props.updateLS}
         updateBoardTitle={props.updateBoardTitle}
         addListItems={addListItems}
         deleteTask={deleteTask}
         saveChanges={saveChanges}
         getAllBoards={getAllBoards}
         changeTaskLocation={changeTaskLocation}
-        currIndex={index}
         moveRight={props.moveRight}
+        //Index for sorting
+        currIndex={index}
       />
     );
   });

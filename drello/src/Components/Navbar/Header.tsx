@@ -30,8 +30,13 @@ export default function Header(props: boardHandle) {
     setShowCreateBoardModal((prevModalState) => !prevModalState);
   }
 
-  function createNewBoard() {
-    props.createBoard();
+  function createNewBoard(title: string) {
+    const newBoard = {
+      id: nanoid(),
+      title: title,
+      index: props.boardItemsLenght,
+    };
+    return props.createBoard(newBoard);
   }
 
   return (

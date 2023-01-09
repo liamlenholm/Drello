@@ -16,7 +16,6 @@ interface BoardSettings {
   name: string;
   listTasks: Array<any>;
   deleteBoard: any;
-  updateLS: any;
   updateBoardTitle: any;
   addListItems: any;
   deleteTask: any;
@@ -108,10 +107,6 @@ export default function Board(props: BoardSettings) {
     }
   }, [list]);
 
-  React.useEffect(() => {
-    return () => props.updateLS;
-  }, [boardTitle]);
-
   const listItemsContent = props.listTasks.map((data, index) => {
     //Without this if statement it will render an empty array which makes a gap between the board title and the second task becuase task1 is invincible
     if (data.taskName.length > 0) {
@@ -122,7 +117,7 @@ export default function Board(props: BoardSettings) {
               <div className="flex items-center space-x-4 ">
                 <div className="shrink-0"></div>
                 <div
-                  className={`min-w-0 flex-1 bg-${data.taskColor}-700/50`}
+                  className={`min-w-0 flex-1 bg-${data.taskColor}-700`}
                   onClick={() =>
                     renderEditModal(
                       data.id2,

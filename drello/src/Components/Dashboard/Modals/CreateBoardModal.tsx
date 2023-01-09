@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Button, Label, TextInput, Checkbox } from "flowbite-react";
+import { Modal, Button, Label, TextInput } from "flowbite-react";
 
 interface ModalVisable {
   modalVisable: boolean;

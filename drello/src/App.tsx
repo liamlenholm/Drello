@@ -21,10 +21,6 @@ function App() {
     );
   }
 
-  function updateLS() {
-    console.log("funkar");
-  }
-
   function updateBoardTitle(boardId: string, boardName: string) {
     setBoardItems((oldBoard: any) =>
       oldBoard.map((board: any) => {
@@ -87,7 +83,6 @@ function App() {
       <Dashboard
         boardItems={boardItems}
         deleteBoard={deleteBoard}
-        updateLS={updateLS}
         updateBoardTitle={updateBoardTitle}
         addListItems={addListItems}
         moveRight={moveRight}
