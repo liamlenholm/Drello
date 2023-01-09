@@ -30,6 +30,8 @@ interface BoardSettings {
 export default function Board(props: BoardSettings) {
   const [boardTitle, setBoardTitle] = React.useState(props);
 
+  const [colors, setColors] = React.useState(["white", "red", "blue", "green"]);
+
   //List that will be stored in localstorage
   const [list, setList] = React.useState([
     {
@@ -44,6 +46,7 @@ export default function Board(props: BoardSettings) {
     taskId: "",
     taskName: "",
     taskDesc: "",
+    taskColor: "",
   });
 
   const [showCreateListItemModal, setShowCreateListItemModal] =
@@ -52,11 +55,17 @@ export default function Board(props: BoardSettings) {
   const [showEditListItemModal, setShowEditListItemModal] =
     React.useState(false);
 
-  function renderEditModal(taskId: string, taskName: string, taskDesc: string) {
+  function renderEditModal(
+    taskId: string,
+    taskName: string,
+    taskDesc: string,
+    taskColor: string
+  ) {
     setTaskInfo({
       taskId: taskId,
       taskName: taskName,
       taskDesc: taskDesc,
+      taskColor: taskColor,
     });
 
     setShowEditListItemModal((prevState) => !prevState);
@@ -109,16 +118,17 @@ export default function Board(props: BoardSettings) {
       if (boardTitle.id == data.id) {
         return (
           <div key={data.id2}>
-            <li className="py-3 sm:py-4">
-              <div className="flex items-center space-x-4">
+            <li className="py-3 sm:py-4 ">
+              <div className="flex items-center space-x-4 ">
                 <div className="shrink-0"></div>
                 <div
-                  className="min-w-0 flex-1"
+                  className={`min-w-0 flex-1 bg-${data.taskColor}-700/50`}
                   onClick={() =>
                     renderEditModal(
                       data.id2,
                       data.taskName,
-                      data.taskDescription
+                      data.taskDescription,
+                      data.taskColor
                     )
                   }
                   style={{ cursor: "pointer" }}
@@ -149,6 +159,8 @@ export default function Board(props: BoardSettings) {
                 taskName={taskInfo.taskName}
                 taskDesc={taskInfo.taskDesc}
                 taskId={taskInfo.taskId}
+                currentColor={taskInfo.taskColor}
+                allColors={colors}
                 saveChanges={props.saveChanges}
                 getAllBoards={props.getAllBoards}
                 changeTaskLocation={props.changeTaskLocation}
@@ -171,6 +183,8 @@ export default function Board(props: BoardSettings) {
   const handleNameValidationFail = () => {
     console.log("Rename has failed");
   };
+
+  console.log(props.listTasks);
 
   return (
     <div className="max-w-fit inline-grid mx-3 mt-2">

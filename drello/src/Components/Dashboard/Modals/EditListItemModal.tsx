@@ -18,6 +18,8 @@ interface ModalVisable {
   saveChanges: any;
   getAllBoards: any;
   changeTaskLocation: any;
+  currentColor: string;
+  allColors: Array<string>;
 }
 
 export default function EditListItemModal(props: ModalVisable) {
@@ -25,9 +27,8 @@ export default function EditListItemModal(props: ModalVisable) {
     taskName: "",
     taskDescription: "",
     taskId: "",
+    taskColor: "",
   });
-
-  const [selected, setSelected] = React.useState(false);
 
   function handleChange(event: any) {
     setFormData((prevFormData) => {
@@ -46,16 +47,15 @@ export default function EditListItemModal(props: ModalVisable) {
       taskName: props.taskName,
       taskDescription: props.taskDesc,
       taskId: props.taskId,
+      taskColor: props.currentColor,
     });
   }
 
-  function selectedColor() {
-    setSelected((prevState) => !prevState);
-    console.log(selected);
-    console.log(isSelected);
+  function setColor(color: string) {
+    formData.taskColor = color;
+    props.saveChanges(formData.taskColor);
+    console.log(color);
   }
-
-  let isSelected = selected ? "selected" : "";
 
   const allBoards = props.getAllBoards();
   const renderAllBoards = allBoards.map((data: any) => {
@@ -69,6 +69,18 @@ export default function EditListItemModal(props: ModalVisable) {
       >
         {data.title}
       </Dropdown.Item>
+    );
+  });
+
+  const avalibleColors = props.allColors.map((data: any) => {
+    let selectedColor = data === formData.taskColor;
+    return (
+      <span
+        onClick={() => setColor(data)}
+        className={`dot ${data} ${selectedColor ? "selected" : ""}`}
+      >
+        ✔
+      </span>
     );
   });
 
@@ -118,7 +130,8 @@ export default function EditListItemModal(props: ModalVisable) {
                 props.saveChanges(
                   formData.taskId,
                   formData.taskName,
-                  formData.taskDescription
+                  formData.taskDescription,
+                  formData.taskColor
                 );
                 props.toggleModal();
               }}
@@ -126,22 +139,7 @@ export default function EditListItemModal(props: ModalVisable) {
               Save Changes
             </Button>
 
-            <div className="flex gap-2 items-center">
-              <span
-                className={`dot green ${isSelected}`}
-                onClick={selectedColor}
-              >
-                ✔
-              </span>
-              <span className={`dot blue ${isSelected}`}>✔</span>
-              <span className={`dot red ${isSelected}`}>✔</span>
-              <span
-                className={`dot cyan ${isSelected}`}
-                onClick={selectedColor}
-              >
-                ✔
-              </span>
-            </div>
+            <div className="flex gap-2 items-center">{avalibleColors}</div>
 
             <div className="">
               <Dropdown label="Move to">{renderAllBoards}</Dropdown>

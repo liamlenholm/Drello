@@ -30,11 +30,21 @@ export default function Dashboard(props: boardHandle) {
     );
   }
 
-  function saveChanges(taskId: string, taskName: string, taskDesc: string) {
+  function saveChanges(
+    taskId: string,
+    taskName: string,
+    taskDesc: string,
+    taskColor: string
+  ) {
     setItemsBoard((oldItems: any) =>
       oldItems.map((item: any) => {
         return item.id2 === taskId
-          ? { ...item, taskName: taskName, taskDescription: taskDesc }
+          ? {
+              ...item,
+              taskName: taskName,
+              taskDescription: taskDesc,
+              taskColor: taskColor,
+            }
           : item;
       })
     );
