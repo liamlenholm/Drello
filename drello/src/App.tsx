@@ -2,6 +2,7 @@ import React from "react";
 import Header from "./Components/Navbar/Header";
 import "./App.css";
 import Dashboard from "./Components/Dashboard/Dashboard";
+import { arrayMoveImmutable } from "array-move";
 
 function App() {
   const [boardItems, setBoardItems] = React.useState(() =>
@@ -41,14 +42,14 @@ function App() {
 
   function moveRight(boardId: string, currentIndex: number) {
     console.log(boardItems, "BEFORE");
-    setBoardItems((oldBoard: any) =>
-      oldBoard.map((board: any) => {
-        return board.id === boardId
-          ? { ...board, index: board.index + 1 }
-          : board;
-      })
+    const movedArr = arrayMoveImmutable(
+      boardItems,
+      currentIndex,
+      currentIndex + 1
     );
-    console.log(boardItems, "AFTER");
+
+    setBoardItems(movedArr);
+    console.log(boardItems);
   }
 
   //Darkmode switch
